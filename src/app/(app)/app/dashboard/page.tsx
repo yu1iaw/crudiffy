@@ -8,7 +8,7 @@ export default async function Dashboard() {
     const userData = await getKindeUserInfo();
     if (!userData?.isAuthenticated) return redirect('/api/auth/login');
 
-    // if (!userData.isPayingMember) return redirect('/');
+    if (!userData.isPayingMember) return redirect('/');
 
     return (
         <div className="pt-5">

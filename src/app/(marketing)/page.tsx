@@ -8,7 +8,6 @@ import Link from "next/link";
 
 export default async function Home() {
 	const userData = await getKindeUserInfo();
-	// const isPayingMember = await redis.sismember('membership', userData?.user?.id ?? '');
 
 	return (
 		<div className="relative bg-[#a385e0] min-h-screen flex flex-col lg:flex-row justify-center items-center gap-y-10 xl:gap-16 font-[family-name:var(--font-geist-sans)]">

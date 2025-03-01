@@ -5,6 +5,7 @@ import { redis } from "@/lib/redis";
 import { getKindeUserInfo } from "@/lib/server-utils";
 import { TCreated, TSelected } from "@/lib/types";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { redirect } from "next/navigation";
 
 
 let [monthKey, yearKey, userIdKey] = ['', '', ''];
@@ -24,10 +25,9 @@ export const getRedisExpenses = unstable_cache(async (month: string, year: numbe
 
 export const deleteRedisExpenses = async (array: TSelected[]) => {
     const userData = await getKindeUserInfo();
-    // if (!userData?.isAuthenticated) return redirect('/api/auth/login');
-    // if (!userData.isPayingMember) return redirect('/');
-    if (!userData?.isAuthenticated) return;
-    if (!userData.isPayingMember) return;
+    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
+    if (!userData.isPayingMember) return redirect('/');
+
 
     const modArr = array.sort((a, b) => b.index - a.index);
 
@@ -46,10 +46,9 @@ export const deleteRedisExpenses = async (array: TSelected[]) => {
 
 export const editRedisExpense = async (editedItem: { date: string; category: string; index: number; payload: {}}) => {
     const userData = await getKindeUserInfo();
-    // if (!userData?.isAuthenticated) return redirect('/api/auth/login');
-    // if (!userData.isPayingMember) return redirect('/');
-    if (!userData?.isAuthenticated) return;
-    if (!userData.isPayingMember) return;
+    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
+    if (!userData.isPayingMember) return redirect('/');
+
     
     try {
         // const edited = await redis.json.merge('january:2025', `$.user:1['food'][0]`, {amount: 22})
@@ -64,10 +63,9 @@ export const editRedisExpense = async (editedItem: { date: string; category: str
 
 export const createRedisExpense = async ({ id, description, amount, createdAt, category }: TCreated) => {
     const userData = await getKindeUserInfo();
-    // if (!userData?.isAuthenticated) return redirect('/api/auth/login');
-    // if (!userData.isPayingMember) return redirect('/');
-    if (!userData?.isAuthenticated) return;
-    if (!userData.isPayingMember) return;
+    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
+    if (!userData.isPayingMember) return redirect('/');
+
     
     const date = `${months[new Date().getMonth()].toLowerCase()}:${new Date().getFullYear()}`;
 

@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/contexts/auth-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Vast_Shadow } from "next/font/google";
 import "./globals.css";
@@ -30,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <AuthProvider>
+    <AuthProvider>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${vast.variable} antialiased bg-gray-100`}
@@ -39,6 +40,6 @@ export default function RootLayout({
           <Toaster />
         </body>
       </html>
-    // </AuthProvider>
+    </AuthProvider>
   );
 }
