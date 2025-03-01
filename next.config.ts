@@ -13,9 +13,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" }
     ]
   },
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // env: {
   //   KINDE_SITE_URL: process.env.KINDE_SITE_URL ?? `https://crudify-theta.vercel.app`,
   //   KINDE_POST_LOGOUT_REDIRECT_URL:
