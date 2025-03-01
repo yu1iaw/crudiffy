@@ -36,10 +36,10 @@ export default async function Home() {
 				<div className="flex gap-4">
 					{!userData?.isAuthenticated ? (
 						<>
-							<LoginLink>
+							<LoginLink postLoginRedirectURL="/app/dashboard">
 								<Button size="lg">Login</Button>
 							</LoginLink>
-							<RegisterLink>
+							<RegisterLink postLoginRedirectURL="/app/dashboard">
 								<Button variant="secondary" size="lg">Register</Button>
 							</RegisterLink>
 						</>
