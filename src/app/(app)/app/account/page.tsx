@@ -3,10 +3,13 @@ import { Loading } from "@/components/loading";
 import { getKindeUserInfo } from "@/lib/server-utils";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 
 export default async function Account() {
+    await connection()
+
     const userData = await getKindeUserInfo();
     if (!userData?.isAuthenticated) return redirect('/api/auth/login');
 
