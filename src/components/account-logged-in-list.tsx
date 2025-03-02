@@ -16,7 +16,16 @@ export const AccountLoggedInList = async ({ userId }: { userId: string }) => {
                 <p className="font-light">The last time you logged in: </p>
                 <div>
                     {data.loggedIn.reverse().slice(0, 2).map(item => (
-                        <p key={item} className="font-medium">{new Date(+item).toLocaleString()}</p>
+                        <p key={item} className="font-medium">
+                            {new Date(+item).toLocaleString('en-au', {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false
+                            })}
+                        </p>
                     ))}
                 </div>
             </div>
