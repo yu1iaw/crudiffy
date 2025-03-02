@@ -2,9 +2,12 @@ import { Combobox } from "@/components/combobox";
 import { DashboardTabs } from "@/components/dashboard-tabs";
 import { getKindeUserInfo } from "@/lib/server-utils";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 
 
 export default async function Dashboard() {    
+    await connection()
+    
     const userData = await getKindeUserInfo();
     if (!userData?.isAuthenticated) return redirect('/api/auth/login');
 
