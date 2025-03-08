@@ -1,4 +1,5 @@
 import { getRedisLoggedInfo } from "@/lib/server-utils";
+import { TimeRow } from "./time-row";
 
 
 export const AccountLoggedInList = async ({ userId }: { userId: string }) => {
@@ -16,16 +17,7 @@ export const AccountLoggedInList = async ({ userId }: { userId: string }) => {
                 <p className="font-light">The last time you logged in: </p>
                 <div>
                     {data.loggedIn.reverse().slice(0, 2).map(item => (
-                        <p key={item} className="font-medium">
-                            {new Date(+item).toLocaleString('en-gb', {
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false
-                            })}
-                        </p>
+                        <TimeRow key={item} item={item} />
                     ))}
                 </div>
             </div>

@@ -14,14 +14,15 @@ export const getRedisExpenses = unstable_cache(async (month: string, year: numbe
     [monthKey, yearKey, userIdKey] = [month, year.toString(), userId];
     
     try {
-        // const expenses = await redis.json.get(`${month.toLowerCase()}:${year}`, "$.user:1");
         const expenses = await redis.call('json.get', `${month.toLowerCase()}:${year}`, `$.user:${userId}`);
+        
         return expenses as string | null;
     } catch (error) {
         console.log(error);
         return null;
     }
 }, [monthKey, yearKey, userIdKey], { tags: ['user-expenses'], revalidate: 1800 })
+
 
 export const deleteRedisExpenses = async (array: TSelected[]) => {
     const userData = await getKindeUserInfo();
@@ -32,11 +33,10 @@ export const deleteRedisExpenses = async (array: TSelected[]) => {
     const modArr = array.sort((a, b) => b.index - a.index);
 
     try {
-        const deleted = await Promise.all(modArr.map(item => {
-            // return redis.json.del(item.date, `$.user:1['${item.category}'][${item.index}]`);
+        await Promise.all(modArr.map(item => {
             return redis.call('json.del', item.date, `$.user:${userData.user.id}['${item.category}'][${item.index}]`);
         }))
-        console.log('deleted: ', deleted);
+
         revalidateTag('user-expenses');
     } catch (error) {
         console.log(error);
@@ -49,11 +49,9 @@ export const editRedisExpense = async (editedItem: { date: string; category: str
     if (!userData?.isAuthenticated) return redirect('/api/auth/login');
     if (!userData.isPayingMember) return redirect('/');
 
-    
     try {
-        // const edited = await redis.json.merge('january:2025', `$.user:1['food'][0]`, {amount: 22})
-        const edited = await redis.call('json.merge', editedItem.date, `$.user:${userData.user.id}['${editedItem.category}'][${editedItem.index}]`, `${JSON.stringify(editedItem.payload)}`)
-        console.log('edited: ', edited);
+        await redis.call('json.merge', editedItem.date, `$.user:${userData.user.id}['${editedItem.category}'][${editedItem.index}]`, `${JSON.stringify(editedItem.payload)}`)
+
         revalidateTag('user-expenses');
     } catch (error) {
         console.log(error);
@@ -78,8 +76,8 @@ export const createRedisExpense = async ({ id, description, amount, createdAt, c
             await redis.call('json.merge', date, `$.user:${userData.user.id}`, '{"shopping": [], "food": [], "bills&utilities": [], "entertainment": [], "others": []}');
         }
 
-        const created = await redis.call('json.arrinsert', date, `$.user:${userData.user.id}['${category}']`, 0, `${JSON.stringify({ id, description, amount, createdAt })}`);
-        console.log('created: ', created);
+        await redis.call('json.arrinsert', date, `$.user:${userData.user.id}['${category}']`, 0, `${JSON.stringify({ id, description, amount, createdAt })}`);
+
         revalidateTag('user-expenses');
     } catch (error) {
         console.log(error);
