@@ -3,7 +3,7 @@
 
 export const TimeRow = ({ item }: { item: string }) => {    
     return (
-        <p className="font-medium" suppressHydrationWarning>
+        <p className="font-medium">
             {new Date(+item).toLocaleString('en-gb', {
                 day: "2-digit",
                 month: "2-digit",
