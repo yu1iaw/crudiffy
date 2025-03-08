@@ -1,5 +1,5 @@
 import { getRedisLoggedInfo } from "@/lib/server-utils";
-import { TimeRow } from "./time-row";
+import { TimestampFragment } from "./timestamp-fragment";
 
 
 export const AccountLoggedInList = async ({ userId }: { userId: string }) => {
@@ -17,7 +17,7 @@ export const AccountLoggedInList = async ({ userId }: { userId: string }) => {
                 <p className="font-light">The last time you logged in: </p>
                 <div>
                     {data.loggedIn.reverse().slice(0, 2).map(item => (
-                        <TimeRow key={item} item={item} />
+                        <TimestampFragment key={item} item={item} />
                     ))}
                 </div>
             </div>
