@@ -11,7 +11,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export const createCheckoutSession = async () => {
     const userData = await getKindeUserInfo();
-    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
+    if (!userData?.isAuthenticated) redirect('/api/auth/login');
 
     const session = await stripe.checkout.sessions.create({
         customer_email: userData.user.email ?? 'anon@github.com',

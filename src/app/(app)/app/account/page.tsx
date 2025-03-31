@@ -11,9 +11,9 @@ export default async function Account() {
     await connection()
 
     const userData = await getKindeUserInfo();
-    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
+    if (!userData?.isAuthenticated) redirect('/api/auth/login');
 
-    if (!userData.isPayingMember) return redirect('/');
+    if (!userData.isPayingMember) redirect('/');
 
     return (
         <>

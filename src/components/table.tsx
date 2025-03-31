@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TTableRow } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 import { ArrowUpDown, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ModalDialog } from "./modal-dialog";
 import { RightSheet } from "./right-sheet";
 import { DashboardTableRow } from "./table-row";
@@ -108,12 +108,14 @@ export const DashboardTable = ({ data, setOptimisticData }: { data: TTableRow[],
         table.getSelectedRowModel().rows.forEach(r => r.toggleSelected())
     }
 
+    const total = useMemo(() => Object.values(table.getRowModel().rowsById).reduce((acc, curr) => acc + +curr.original.amount || 0, 0), [table.getRowModel().rowsById]);
+    
     return (
-        <div className="relative flex flex-col min-h-[359px] w-full bg-white rounded-md p-2">
+        <div className="relative flex flex-col min-h-[391px] w-full bg-white rounded-md p-2">
             <RightSheet setOptimisticData={setOptimisticData}>
                 <Button
                     size="icon"
-                    className="absolute w-14 h-14 right-0 top-[50%] translate-x-[43%] -translate-y-[110%] rounded-full bg-[#a385e0] hover:bg-[#9b74e9] transition shadow-md z-50 [&_svg]:size-6"
+                    className="absolute w-14 h-14 right-0 top-[50%] translate-x-[43%] -translate-y-[103%] rounded-full bg-[#a385e0] hover:bg-[#9b74e9] transition shadow-md z-50 [&_svg]:size-6"
                 >
                     <Plus color="white" />
                 </Button>
@@ -159,6 +161,14 @@ export const DashboardTable = ({ data, setOptimisticData }: { data: TTableRow[],
                             </TableRow>
                         )}
                     </TableBody>
+                    {table.getRowModel().rows?.length > 0 && (
+                        <TableFooter className="bg-slate-300/30">
+                            <TableRow>
+                                <TableCell colSpan={2} align="right" className="py-0">Total:</TableCell>
+                                <TableCell align="center" className="py-0">{total.toFixed(2)}</TableCell>
+                            </TableRow>
+                        </TableFooter>
+                    )}
                 </Table>
             </div>
             <div className="flex flex-1 items-end justify-between pt-4 pb-2">

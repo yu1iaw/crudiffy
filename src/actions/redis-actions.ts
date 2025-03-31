@@ -26,8 +26,8 @@ export const getRedisExpenses = unstable_cache(async (month: string, year: numbe
 
 export const deleteRedisExpenses = async (array: TSelected[]) => {
     const userData = await getKindeUserInfo();
-    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
-    if (!userData.isPayingMember) return redirect('/');
+    if (!userData?.isAuthenticated) redirect('/api/auth/login');
+    if (!userData.isPayingMember) redirect('/');
 
 
     const modArr = array.sort((a, b) => b.index - a.index);
@@ -46,8 +46,8 @@ export const deleteRedisExpenses = async (array: TSelected[]) => {
 
 export const editRedisExpense = async (editedItem: { date: string; category: string; index: number; payload: {}}) => {
     const userData = await getKindeUserInfo();
-    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
-    if (!userData.isPayingMember) return redirect('/');
+    if (!userData?.isAuthenticated) redirect('/api/auth/login');
+    if (!userData.isPayingMember) redirect('/');
 
     try {
         await redis.call('json.merge', editedItem.date, `$.user:${userData.user.id}['${editedItem.category}'][${editedItem.index}]`, `${JSON.stringify(editedItem.payload)}`)
@@ -61,8 +61,8 @@ export const editRedisExpense = async (editedItem: { date: string; category: str
 
 export const createRedisExpense = async ({ id, description, amount, createdAt, category }: TCreated) => {
     const userData = await getKindeUserInfo();
-    if (!userData?.isAuthenticated) return redirect('/api/auth/login');
-    if (!userData.isPayingMember) return redirect('/');
+    if (!userData?.isAuthenticated) redirect('/api/auth/login');
+    if (!userData.isPayingMember) redirect('/');
 
     
     const date = `${months[new Date().getMonth()].toLowerCase()}:${new Date().getFullYear()}`;
