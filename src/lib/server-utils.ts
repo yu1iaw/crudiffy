@@ -18,14 +18,23 @@ export const getKindeUserInfo = async () => {
 }
 
 export const getRedisLoggedInfo = async (userId: string) => {
-    const { getAccessToken } = getKindeServerSession();
+    const { getIdToken } = getKindeServerSession();
 
     try {
-        // const idToken = await getIdToken();
-        const accessToken = await getAccessToken();
-        if (!accessToken) throw Error(`Access token is ${accessToken}`);
-
-        await redis.zadd(`set:${userId}`, "NX", accessToken?.iat * 1000, String(accessToken?.iat * 1000));
+        let authTime;
+        const idToken = await getIdToken();
+        if (idToken) {
+            authTime = idToken.updated_at;
+            redis.set(`user:${userId}`, idToken.updated_at);
+        } else {            
+            const redisIdToken = await redis.get(`user:${userId}`);
+            if (redisIdToken) {
+                authTime = +redisIdToken;
+            }
+        }
+        
+        if (!authTime) throw Error(`Token is undefined!`);
+        await redis.zadd(`set:${userId}`, "NX",  authTime * 1000, String(authTime * 1000));
 
         const loggedIn = await redis.zrange(`set:${userId}`, 0, -1);
         if (loggedIn.length > 2) await redis.zpopmin(`set:${userId}`);
